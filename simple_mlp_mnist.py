@@ -5,6 +5,7 @@ import torch.nn.functional as F
 from torchvision import datasets, transforms
 from tqdm.notebook import tqdm
 
+
 mnist_train = datasets.MNIST(root="./datasets", train=True, transform=transforms.ToTensor(), download=True)
 mnist_test = datasets.MNIST(root="./datasets", train=False, transform=transforms.ToTensor(), download=True)
 train_loader = torch.utils.data.DataLoader(mnist_train, batch_size=64, shuffle=True)
@@ -32,12 +33,12 @@ model = MNIST_MLP_MODEL()
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
 
-batches = iter(train_loader)
-test_batches = iter(test_loader)
+#batches = iter(train_loader)
+#test_batches = iter(test_loader)
 
 def train(train_loader,model,loss_fn,optimizer):
     size = len(train_loader.dataset)
-    for num, batch in enumerate(tqdm(batches)):
+    for num, batch in enumerate(tqdm(train_loader)):
         img, label = batch
         #forward
         pred = model(img)
@@ -55,7 +56,7 @@ def test(test_loader,model):
     size = len(test_loader.dataset)
     test_loss, correct = 0,0
     with torch.no_grad():
-        for num, batch in enumerate(tqdm(test_batches)):
+        for num, batch in enumerate(tqdm(test_loader)):
             model.eval()
             img,label = batch
             pred = model(img)
